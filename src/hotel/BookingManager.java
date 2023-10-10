@@ -1,16 +1,17 @@
 package hotel;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public class BookingManager {
+public class BookingManager implements BookingManagerInterface {
 
 	private Room[] rooms;
+	private BookingDetail[] bookings;
 
 	public BookingManager() {
 		this.rooms = initializeRooms();
+		this.bookings = new BookingDetail[100];
 	}
 
 	public Set<Integer> getAllRooms() {
@@ -24,16 +25,25 @@ public class BookingManager {
 
 	public boolean isRoomAvailable(Integer roomNumber, LocalDate date) {
 		//implement this method
-		return false;
+		for (BookingDetail bookingDetail: bookings)
+			if (bookingDetail.getDate().equals(date) && bookingDetail.getRoomNumber().equals(roomNumber))
+				return false;
+		return true;
+//		return bookings.stream().filter(bookingDetail -> bookingDetail.getRoomNumber().equals(roomNumber) && bookingDetail.getDate().equals(date)).toList().isEmpty();
 	}
 
-	public void addBooking(BookingDetail bookingDetail) {
+	public void addBooking(BookingDetail bookingDetail) throws Exception {
 		//implement this method
+		if (isRoomAvailable(bookingDetail.getRoomNumber(), bookingDetail.getDate()))
+			bookings[bookings.length - 1] = bookingDetail;
+		else
+			throw new Exception("The room is not available for this date");
 	}
 
 	public Set<Integer> getAvailableRooms(LocalDate date) {
 		//implement this method
 		return null;
+//		return bookings.stream().filter(bookingDetail -> bookingDetail.getDate().equals(date)).map(BookingDetail::getRoomNumber).collect(Collectors.toSet());
 	}
 
 	private static Room[] initializeRooms() {
