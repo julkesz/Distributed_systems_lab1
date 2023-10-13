@@ -1,17 +1,15 @@
 package hotel;
 
+import java.rmi.RemoteException;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class BookingManager implements BookingManagerInterface {
 
 	private Room[] rooms;
-	private BookingDetail[] bookings;
 
 	public BookingManager() {
 		this.rooms = initializeRooms();
-		this.bookings = new BookingDetail[100];
 	}
 
 	public Set<Integer> getAllRooms() {
@@ -25,25 +23,30 @@ public class BookingManager implements BookingManagerInterface {
 
 	public boolean isRoomAvailable(Integer roomNumber, LocalDate date) {
 		//implement this method
-		for (BookingDetail bookingDetail: bookings)
-			if (bookingDetail.getDate().equals(date) && bookingDetail.getRoomNumber().equals(roomNumber))
-				return false;
+		Room room = Arrays.stream(rooms).filter(room1 -> room1.getRoomNumber().equals(roomNumber)).toList().stream().findFirst().get();
+		for (BookingDetail bookingDetail: room.getBookings())
+			if (bookingDetail != null)
+				if (bookingDetail.getDate().equals(date) && bookingDetail.getRoomNumber().equals(roomNumber))
+					return false;
 		return true;
-//		return bookings.stream().filter(bookingDetail -> bookingDetail.getRoomNumber().equals(roomNumber) && bookingDetail.getDate().equals(date)).toList().isEmpty();
 	}
 
-	public void addBooking(BookingDetail bookingDetail) throws Exception {
+	public void addBooking(BookingDetail bookingDetail) throws RemoteException {
 		//implement this method
+		Room room = Arrays.stream(rooms).filter(room1 -> room1.getRoomNumber().equals(bookingDetail.getRoomNumber())).toList().stream().findFirst().get();
 		if (isRoomAvailable(bookingDetail.getRoomNumber(), bookingDetail.getDate()))
-			bookings[bookings.length - 1] = bookingDetail;
+			room.addBooking(bookingDetail);
 		else
-			throw new Exception("The room is not available for this date");
+			throw new RemoteException("The room is not available for this date");
 	}
 
 	public Set<Integer> getAvailableRooms(LocalDate date) {
 		//implement this method
-		return null;
-//		return bookings.stream().filter(bookingDetail -> bookingDetail.getDate().equals(date)).map(BookingDetail::getRoomNumber).collect(Collectors.toSet());
+		Set<Integer> rooms = new HashSet<>();
+		for (Room room: this.rooms)
+			if (isRoomAvailable(room.getRoomNumber(), date))
+				rooms.add(room.getRoomNumber());
+		return rooms;
 	}
 
 	private static Room[] initializeRooms() {

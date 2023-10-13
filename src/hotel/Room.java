@@ -29,4 +29,8 @@ public class Room implements Serializable {
 	public void setBookings(List<BookingDetail> bookings) {
 		this.bookings = bookings;
 	}
+
+	public void addBooking(BookingDetail bookingDetail) {
+		this.bookings.add(bookingDetail);
+	}
 }

@@ -8,6 +8,7 @@ import java.rmi.server.UnicastRemoteObject;
 public class BookingServer {
     public static void main(String[] args) {
         try {
+            System.setSecurityManager(null);
             BookingManagerInterface bookingManager = new BookingManager();
             Registry registry = LocateRegistry.getRegistry();
             BookingManagerInterface stub = (BookingManagerInterface) UnicastRemoteObject.exportObject(bookingManager, 0);
