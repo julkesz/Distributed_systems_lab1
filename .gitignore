@@ -1,3 +1,4 @@
 .idea/
-bin
-out
+bin/
+out/
+Distributed_systems_lab1.iml
