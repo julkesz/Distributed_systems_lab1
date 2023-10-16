@@ -1,9 +1,10 @@
 package hotel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Room {
+public class Room implements Serializable {
 
 	private Integer roomNumber;
 	private List<BookingDetail> bookings;
@@ -27,5 +28,9 @@ public class Room {
 
 	public void setBookings(List<BookingDetail> bookings) {
 		this.bookings = bookings;
+	}
+
+	public void addBooking(BookingDetail bookingDetail) {
+		this.bookings.add(bookingDetail);
 	}
 }

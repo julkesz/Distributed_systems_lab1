@@ -1,5 +1,6 @@
 package staff;
 
+import java.rmi.RemoteException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Set;
@@ -14,18 +15,18 @@ public abstract class AbstractScriptedSimpleTest {
 	 * Return true if there is no booking for the given room on the date,
 	 * otherwise false
 	 */
-	protected abstract boolean isRoomAvailable(Integer room, LocalDate date);
+	protected abstract boolean isRoomAvailable(Integer room, LocalDate date) throws RemoteException;
 
 	/**
 	 * Add a booking for the given guest in the given room on the given
 	 * date. If the room is not available, throw a suitable Exception.
 	 */
-	protected abstract void addBooking(BookingDetail bookingDetail);
+	protected abstract void addBooking(BookingDetail bookingDetail) throws Exception;
 
 	/**
 	 * Return a list of all the available room numbers for the given date
 	 */
-	protected abstract Set<Integer> getAvailableRooms(LocalDate date);
+	protected abstract Set<Integer> getAvailableRooms(LocalDate date) throws RemoteException;
 
 	/**
 	 * Return a list of all the room numbers
